@@ -11,8 +11,7 @@ class dataObj:
 
 
 class dataManager:
-	def createDataObject(path, type_of_data, sep=','):
-		print(type_of_data)
+	def createDataObject(self, path, type_of_data, sep=','):
 		if type_of_data not in ['measurement', 'clinical']:
 			raise ValueError('Type can only be \'measurement\' or \'clinical\'')
 		else:
