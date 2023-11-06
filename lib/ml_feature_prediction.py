@@ -14,7 +14,7 @@ class dataManager:
 	def createDataObject(self, path, type_of_data, sep=','):
 		print(path)
 		print(type_of_data)
-		if type_of_data not in ['measurement', 'clinical']:
+		if (type_of_data != 'measurement') and (type_of_data != 'clinical'):
 			raise ValueError('Type can only be \'measurement\' or \'clinical\'')
 		else:
 			data = pd.read_csv(path, sep=sep)
