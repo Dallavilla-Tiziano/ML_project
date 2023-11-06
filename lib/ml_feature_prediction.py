@@ -16,4 +16,4 @@ class dataManager:
 			print('Type can only be \'measurement\' or \'clinical\'')
 		else:
 			data = pd.read_csv(path, sep=sep)
-	return dataObj(path, data, type_of_data)
+		return dataObj(path, data, type_of_data)
