@@ -45,9 +45,11 @@ class dataManager:
 					during operation such as join. Please set a different type of index /
 					with \'setDataObjIndex\'''')
 
-	def setDataObjIndex(self, dataObj, index_col):
-		if index_col in dataObj.data.columns:
-			dataObj.data.set_index(index_col, inplace=True)
+	def setDataObjIndex(self, name, index_col):
+		if index_col in self.data_container[name].data.columns:
+			self.data_container[name].data.set_index(index_col, inplace=True)
+			indexed = isinstance(type(self.data_container[name].data.index), pd.RangeIndex)
+			self.data_container[name].is_data_index_set = indexed
 		else:
 			raise ValueError(f'{index_col} is not in {dataObj.name} columns')
 
