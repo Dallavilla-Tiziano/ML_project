@@ -20,20 +20,28 @@ class dataManager:
 		self.data_container = {}
 		self.dataManager_name = name
 
-	def createDataObject(self, path, name, type_of_data, description='', sep=','):
+	def createDataObject(self, path, name, type_of_data, description='', sep=',', data=None):
 		'''Create a dataObj and store it in data_container'''
 		if (type_of_data != 'measurement') and (type_of_data != 'clinical') and (type_of_data != 'accessory'):
 			raise ValueError('Type can only be \'measurement\' or \'clinical\'')
-		else:
+		elif (path) and (data is None):
 			data = pd.read_csv(path, sep=sep)
 			self.data_container[name] = dataObj(path, name, data, type_of_data, description)
+		elif not (path) and (data is not None):
+			self.data_container[name] = dataObj(path, name, data, type_of_data, description)
+		else:
+			print('''something went wrong while creating a data object, \
+					it is not possible to continue. Please check you parameters \
+					and ensure they are correct.''')
 
-	def deleteDataObject(self, name):
-		'''Delete a dataObj from data_conteiner'''
-		try:
-			self.data_container.pop(name)
-		except KeyError:
-			print(f'No data object named {name} is present in the data container!')
+	def deleteDataObject(self, *args):
+		'''Delete a dataObj from data_container'''
+		for name in args:
+			try:
+				self.data_container.pop(name)
+			except KeyError:
+				print(f'No data object named {name} is present in the data container!')
+				continue
 
 	def printDataContainer(self, extended=False):
 		'''Print the dataObj names present in data_container, if extended = True
@@ -68,3 +76,15 @@ class dataManager:
 				return pickle.load(file)
 		else:
 			print('Can\'t import the data manager object, file does not exist.')
+
+	def dataObjectJoin(self, dataObj1, dataObj2, del_parents=False, **kwargs):
+		'''Perform a join operation on 2 dataObj'''
+		data = dataObj1.join(dataObj2, kwargs)
+		name = f'joined {dataObj1.name} and {dataObj2.name}'
+		type_of_data = dataObj1.type_of_data
+		description = f'''results of join between {dataObj1.name} and /
+		{dataObj2.name} with the following parameters: {kwargs}'''
+		self.createDataObject('', name, type_of_data, description, data=data)
+		if del_parents:
+			self.deleteDataObject(dataObj1.name, dataObj2.name)
+
