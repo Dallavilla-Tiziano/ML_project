@@ -69,6 +69,7 @@ class dataManager:
 				print(f'Path: {self.data_container[key].path}')
 				print(f'Type of data: {self.data_container[key].type_of_data}')
 				print(f'Description: {self.data_container[key].description}')
+				print(f'Is indexed: {self.data_container[key].is_data_index_set}')
 			print('---END---')
 
 	def saveDataManager(self, folderpath):
