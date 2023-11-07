@@ -30,10 +30,10 @@ class dataManager:
 			data manager, please choose a different name.''')
 		elif (path) and (data is None):
 			data = pd.read_csv(path, sep=sep, index_col=index_col)
-			indexed = isinstance(type(data.index), pd.RangeIndex)
+			indexed = not isinstance(data.index, pd.RangeIndex)
 			self.data_container[name] = dataObj(path, name, data, type_of_data, description, is_data_index_set=indexed)
 		elif not (path) and (data is not None):
-			indexed = isinstance(type(data.index), pd.RangeIndex)
+			indexed = not isinstance(data.index, pd.RangeIndex)
 			self.data_container[name] = dataObj(path, name, data, type_of_data, description, is_data_index_set=indexed)
 		else:
 			print('''something went wrong while creating a data object, \
@@ -48,7 +48,7 @@ class dataManager:
 	def setDataObjIndex(self, name, index_col):
 		if index_col in self.data_container[name].data.columns:
 			self.data_container[name].data.set_index(index_col, inplace=True)
-			indexed = isinstance(type(self.data_container[name].data.index), pd.RangeIndex)
+			indexed = not isinstance(self.data_container[name].data.index, pd.RangeIndex)
 			self.data_container[name].is_data_index_set = indexed
 		else:
 			raise ValueError(f'{index_col} is not in {dataObj.name} columns')
