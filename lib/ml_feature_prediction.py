@@ -48,8 +48,8 @@ class dataManager:
 
 	def saveDataManager(self, folderpath):
 		'''Save the current dataManager object to the specified path'''
-		filepath = '/'.join([folderpath.rstrip('/'), filename])
 		filename = self.dataManager_name + '.obj'
+		filepath = '/'.join([folderpath.rstrip('/'), filename])
 		if os.path.isdir(folderpath):  # Check if folder exist
 			if not os.path.isfile(filepath):  # Check if file already exist
 				with open(filepath, 'wb') as file:
