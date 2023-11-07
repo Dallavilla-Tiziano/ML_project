@@ -27,7 +27,10 @@ class dataManager:
 
 	def deleteDataObject(self, name):
 		'''Delete a dataObj from data_conteiner'''
-		self.data_container.pop(name, f'No data object named {name} is present in the data container!')
+		try:
+			self.data_container.pop(name)
+		except KeyError:
+			print(f'No data object named {name} is present in the data container!')
 
 	def printDataContainer(self, extended=False):
 		'''Print the dataObj names present in data_container, if extended = True 
