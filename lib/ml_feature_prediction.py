@@ -49,7 +49,7 @@ class dataManager:
 					with \'setDataObjIndex\'''')
 
 	def setDataObjIndex(self, name, index_col):
-		if self.data_container[name].index.name == index_col:
+		if self.data_container[name].data.index.name == index_col:
 			print(f'{index_col} is already set as index for {name} data object.')
 		elif index_col in self.data_container[name].data.columns:
 			self.data_container[name].data.set_index(index_col, inplace=True)
