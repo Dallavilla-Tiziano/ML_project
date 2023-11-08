@@ -113,6 +113,7 @@ class dataManager:
 		else:
 			print('Can\'t import the data manager object, file does not exist.')
 
+# IS THE FOLLOWING FUNCTION USEFUL????
 	def dataObjectJoin(self, dataObj1_name, dataObj2_name, name='', del_parents=False, **kwargs):
 		'''Perform a join operation on 2 dataObj'''
 		dataObj1 = self.getDataObj(dataObj1_name)
@@ -132,3 +133,30 @@ class dataManager:
 					pd.RangeIndex. Please note that this type of index is not supported /
 					during operation such as join. Please set a different type of index /
 					with \'setDataObjIndex\'''')
+
+	def joinIndexes(self, dataObj1_name, dataObj2_name, del_parents=False):
+		'''Intersect two dataObj and create two new tables with containing only /
+		common elements by index'''
+		dataObj1 = self.getDataObj(dataObj1_name)
+		dataObj2 = self.getDataObj(dataObj2_name)
+		if dataObj1.is_data_index_set and dataObj2.is_data_index_set:
+			common_indexes = list(set(dataObj1.data.index).intersect(dataObj2.data.index))
+			dataObj1 = dataObj1.loc[common_indexes]
+			dataObj2 = dataObj2.loc[common_indexes]
+			newdataObj1_name = f'{dataObj1.name}.joinIndexes({dataObj2.name})'
+			newdataObj2_name = f'{dataObj2.name}.joinIndexes({dataObj1.name})'
+			newdataObj1_type_of_data = dataObj1.type_of_data
+			newdataObj2_type_of_data = dataObj2.type_of_data
+			newdataObj1_description = f'''result of joinIndexes between {dataObj1.name} and {dataObj2.name}'''
+			self.createDataObject('', newdataObj1_name, newdataObj1_type_of_data, newdataObj1_description, data=dataObj1)
+			self.createDataObject('', newdataObj2_name, newdataObj2_type_of_data, newdataObj2_description, data=dataObj2)
+			if del_parents:
+				self.deleteDataObject(dataObj1.name, dataObj2.name)
+		else:
+			print('''Your dataset doesn\'t have an index, or is index if of type /
+					pd.RangeIndex. Please note that this type of index is not supported /
+					during operation such as join. Please set a different type of index /
+					with \'setDataObjIndex\'''')
+# @dataclass
+# class dataObjAnalysis:
+# 	data_manager: dataManager
