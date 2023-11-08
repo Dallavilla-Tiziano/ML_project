@@ -140,7 +140,7 @@ class dataManager:
 		dataObj1 = self.getDataObj(dataObj1_name)
 		dataObj2 = self.getDataObj(dataObj2_name)
 		if dataObj1.is_data_index_set and dataObj2.is_data_index_set:
-			common_indexes = list(set(dataObj1.data.index).intersect(dataObj2.data.index))
+			common_indexes = list(set(dataObj1.data.index).intersection(dataObj2.data.index))
 			dataObj1 = dataObj1.loc[common_indexes]
 			dataObj2 = dataObj2.loc[common_indexes]
 			newdataObj1_name = f'{dataObj1.name}.joinIndexes({dataObj2.name})'
