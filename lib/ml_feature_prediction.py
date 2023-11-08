@@ -141,15 +141,15 @@ class dataManager:
 		dataObj2 = self.getDataObj(dataObj2_name)
 		if dataObj1.is_data_index_set and dataObj2.is_data_index_set:
 			common_indexes = list(set(dataObj1.data.index).intersection(dataObj2.data.index))
-			dataObj1 = dataObj1.loc[common_indexes]
-			dataObj2 = dataObj2.loc[common_indexes]
+			dataObj1.data = dataObj1.data.loc[common_indexes]
+			dataObj2.data = dataObj2.data.loc[common_indexes]
 			newdataObj1_name = f'{dataObj1.name}.joinIndexes({dataObj2.name})'
 			newdataObj2_name = f'{dataObj2.name}.joinIndexes({dataObj1.name})'
 			newdataObj1_type_of_data = dataObj1.type_of_data
 			newdataObj2_type_of_data = dataObj2.type_of_data
-			newdataObj1_description = f'''result of joinIndexes between {dataObj1.name} and {dataObj2.name}'''
-			self.createDataObject('', newdataObj1_name, newdataObj1_type_of_data, newdataObj1_description, data=dataObj1)
-			self.createDataObject('', newdataObj2_name, newdataObj2_type_of_data, newdataObj2_description, data=dataObj2)
+			newdataObj_description = f'''result of joinIndexes between {dataObj1.name} and {dataObj2.name}'''
+			self.createDataObject('', newdataObj1_name, newdataObj1_type_of_data, newdataObj_description, data=dataObj1)
+			self.createDataObject('', newdataObj2_name, newdataObj2_type_of_data, newdataObj_description, data=dataObj2)
 			if del_parents:
 				self.deleteDataObject(dataObj1.name, dataObj2.name)
 		else:
