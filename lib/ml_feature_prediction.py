@@ -2,6 +2,7 @@ from dataclasses import dataclass
 import pandas as pd
 import pickle
 import os
+import copy
 
 
 # Class that contains data
@@ -50,7 +51,7 @@ class dataManager:
 
 	def getDataObj(self, name):
 		if name in self.data_container:
-			return self.data_container[name]
+			return copy.deepcopy(self.data_container[name])
 		else:
 			raise KeyError(f'No data object named {name} is present in the data container!')
 
