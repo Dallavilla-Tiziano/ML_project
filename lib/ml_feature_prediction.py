@@ -45,7 +45,7 @@ class dataManager:
 		if not indexed:
 			print(f'''Your dataset \'{name}\' doesn\'t have an index, or is index if of type /
 					pd.RangeIndex. Please note that this type of index is not supported /
-					during operation such as join. Please set a different type of index /
+					during operations such as join. Please set a different type of index /
 					with \'setDataObjIndex\'''')
 
 	def setDataObjIndex(self, name, index_col):
@@ -73,8 +73,8 @@ class dataManager:
 			if extended:
 				print(f'Path: {self.data_container[key].path}')
 				print(f'Type of data: {self.data_container[key].type_of_data}')
-				print(f'Rows: {self.data_container[key].size[0]}')
-				print(f'Columns: {self.data_container[key].size[1]}')
+				print(f'Rows: {self.data_container[key].size()[0]}')
+				print(f'Columns: {self.data_container[key].size()[1]}')
 				print(f'Description: {self.data_container[key].description}')
 				print(f'Is indexed: {self.data_container[key].is_data_index_set}')
 			print('---END---')
