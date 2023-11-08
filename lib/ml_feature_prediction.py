@@ -102,7 +102,7 @@ class dataManager:
 		dataObj1 = self.data_container[dataObj1_name]
 		dataObj2 = self.data_container[dataObj2_name]
 		if dataObj1.is_data_index_set and dataObj2.is_data_index_set:
-			data = dataObj1.join(dataObj2, kwargs)
+			data = dataObj1.data.join(dataObj2.data, kwargs)
 			name = f'joined {dataObj1.name} and {dataObj2.name}'
 			type_of_data = dataObj1.type_of_data
 			description = f'''results of join between {dataObj1.name} and /
