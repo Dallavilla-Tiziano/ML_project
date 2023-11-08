@@ -51,7 +51,7 @@ class dataManager:
 			indexed = not isinstance(self.data_container[name].data.index, pd.RangeIndex)
 			self.data_container[name].is_data_index_set = indexed
 		else:
-			raise ValueError(f'{index_col} is not in {dataObj.name} columns')
+			raise ValueError(f'{index_col} is not in {self.data_container[name].name} columns')
 
 	def deleteDataObject(self, *args):
 		'''Delete a dataObj from data_container'''
