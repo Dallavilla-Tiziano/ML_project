@@ -40,7 +40,7 @@ class dataManager:
 					it is not possible to continue. Please check you parameters \
 					and ensure they are correct.''')
 		if not indexed:
-			print('''Your dataset doesn\'t have an index, or is index if of type /
+			print(f'''Your dataset \'{name}\' doesn\'t have an index, or is index if of type /
 					pd.RangeIndex. Please note that this type of index is not supported /
 					during operation such as join. Please set a different type of index /
 					with \'setDataObjIndex\'''')
@@ -97,8 +97,10 @@ class dataManager:
 		else:
 			print('Can\'t import the data manager object, file does not exist.')
 
-	def dataObjectJoin(self, dataObj1, dataObj2, del_parents=False, **kwargs):
+	def dataObjectJoin(self, dataObj1_name, dataObj2_name, del_parents=False, **kwargs):
 		'''Perform a join operation on 2 dataObj'''
+		dataObj1 = self.data_container[dataObj1_name]
+		dataObj2 = self.data_container[dataObj2_name]
 		if dataObj1.is_data_index_set and dataObj2.is_data_index_set:
 			data = dataObj1.join(dataObj2, kwargs)
 			name = f'joined {dataObj1.name} and {dataObj2.name}'
