@@ -29,7 +29,7 @@ class dataManager:
 		if (type_of_data != 'measurement') and (type_of_data != 'clinical') and (type_of_data != 'accessory'):
 			raise ValueError('Type can only be \'measurement\' or \'clinical\'')
 		elif name in self.data_container:
-			raise ValueError(f'''A data object named {name} is already present in the /
+			raise ValueError(f'''A data object named '{name}' is already present in the /
 			data manager, please choose a different name.''')
 		elif (path) and (data is None):
 			data = pd.read_csv(path, sep=sep, index_col=index_col)
@@ -48,15 +48,23 @@ class dataManager:
 					during operations such as join. Please set a different type of index /
 					with \'setDataObjIndex\'''')
 
-	def setDataObjIndex(self, name, index_col):
-		if self.data_container[name].data.index.name == index_col:
-			print(f'{index_col} is already set as index for {name} data object.')
-		elif index_col in self.data_container[name].data.columns:
-			self.data_container[name].data.set_index(index_col, inplace=True)
-			indexed = not isinstance(self.data_container[name].data.index, pd.RangeIndex)
-			self.data_container[name].is_data_index_set = indexed
+	def getDataObj(self, name):
+		if name in self.data_container:
+			return self.data_container[name]
 		else:
-			raise ValueError(f'{index_col} is not in {self.data_container[name].name} columns')
+			raise KeyError(f'No data object named {name} is present in the data container!')
+
+	def setDataObjIndex(self, name, index_col):
+		dataObj = self.getDataObj(name)
+		if dataObj.data.index.name == index_col:
+			print(f'{index_col} is already set as index for {name} data object.')
+		elif index_col in dataObj.data.columns:
+			dataObj.data.set_index(index_col, inplace=True)
+			indexed = not isinstance(dataObj.data.index, pd.RangeIndex)
+			dataObj.is_data_index_set = indexed
+			self.data_container[name] = dataObj
+		else:
+			raise ValueError(f'{index_col} is not in {dataObj.name} columns')
 
 	def deleteDataObject(self, *args):
 		'''Delete a dataObj from data_container'''
@@ -71,14 +79,15 @@ class dataManager:
 		'''Print the dataObj names present in data_container, if extended = True
 		also print path, type_of_data, and decription'''
 		for key in self.data_container:
+			dataObj = self.getDataObj(key)
 			print(f'Name: {key}')
 			if extended:
-				print(f'Path: {self.data_container[key].path}')
-				print(f'Type of data: {self.data_container[key].type_of_data}')
-				print(f'Rows: {self.data_container[key].size()[0]}')
-				print(f'Columns: {self.data_container[key].size()[1]}')
-				print(f'Description: {self.data_container[key].description}')
-				print(f'Is indexed: {self.data_container[key].is_data_index_set}')
+				print(f'Path: {dataObj.path}')
+				print(f'Type of data: {dataObj.type_of_data}')
+				print(f'Rows: {dataObj.size()[0]}')
+				print(f'Columns: {dataObj.size()[1]}')
+				print(f'Description: {dataObj.description}')
+				print(f'Is indexed: {dataObj.is_data_index_set}')
 			print('---END---')
 
 	def saveDataManager(self, folderpath):
@@ -106,8 +115,8 @@ class dataManager:
 
 	def dataObjectJoin(self, dataObj1_name, dataObj2_name, name='', del_parents=False, **kwargs):
 		'''Perform a join operation on 2 dataObj'''
-		dataObj1 = self.data_container[dataObj1_name]
-		dataObj2 = self.data_container[dataObj2_name]
+		dataObj1 = self.getDataObj(dataObj1_name)
+		dataObj2 = self.getDataObj(dataObj2_name)
 		if dataObj1.is_data_index_set and dataObj2.is_data_index_set:
 			data = dataObj1.data.join(dataObj2.data, **kwargs)
 			if not name:
