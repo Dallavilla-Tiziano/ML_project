@@ -15,6 +15,9 @@ class dataObj:
 	description: str = ''
 	is_data_index_set: bool = False
 
+	def size(self):
+		return [len(self.data.index), len(self.data.columns)]
+
 
 class dataManager:
 	def __init__(self, name='dataManager'):
@@ -70,6 +73,8 @@ class dataManager:
 			if extended:
 				print(f'Path: {self.data_container[key].path}')
 				print(f'Type of data: {self.data_container[key].type_of_data}')
+				print(f'Rows: {self.data_container[key].size[0]}')
+				print(f'Columns: {self.data_container[key].size[1]}')
 				print(f'Description: {self.data_container[key].description}')
 				print(f'Is indexed: {self.data_container[key].is_data_index_set}')
 			print('---END---')
@@ -97,16 +102,17 @@ class dataManager:
 		else:
 			print('Can\'t import the data manager object, file does not exist.')
 
-	def dataObjectJoin(self, dataObj1_name, dataObj2_name, del_parents=False, **kwargs):
+	def dataObjectJoin(self, dataObj1_name, dataObj2_name, name='', del_parents=False, **kwargs):
 		'''Perform a join operation on 2 dataObj'''
 		dataObj1 = self.data_container[dataObj1_name]
 		dataObj2 = self.data_container[dataObj2_name]
 		if dataObj1.is_data_index_set and dataObj2.is_data_index_set:
-			data = dataObj1.data.join(dataObj2.data, kwargs)
-			name = f'joined {dataObj1.name} and {dataObj2.name}'
+			data = dataObj1.data.join(dataObj2.data, **kwargs)
+			if not name:
+				name = f'joined {dataObj1.name} and {dataObj2.name}'
 			type_of_data = dataObj1.type_of_data
 			description = f'''results of join between {dataObj1.name} and /
-			{dataObj2.name} with the following parameters: {kwargs}'''
+			{dataObj2.name} with the following non-default parameters: {kwargs}'''
 			self.createDataObject('', name, type_of_data, description, data=data)
 			if del_parents:
 				self.deleteDataObject(dataObj1.name, dataObj2.name)
