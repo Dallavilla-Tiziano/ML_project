@@ -66,7 +66,8 @@ class dataObjAnalysis:
 		kwargs_pca = self.parameter_container['PCA']
 		pca = PCA(**kwargs_pca)
 		kwargs_ssf = self.parameter_container['PCA.fit_transform']
-		df_pca = pd.DataFrame(pca.fit_transform(df_scaled), columns=df_scaled.columns, index=df_scaled.index)
+		df_pca = pd.DataFrame(pca.fit_transform(df_scaled), index=df_scaled.index)
+		df_pca.columns = ['PC' + str(i) for i in range(1, len(df_pca.columns) + 1)]
 		self.updateDataObjectAnalysis(dataObj, 'PCA', pca)
 		self.updateDataObjectAnalysis(dataObj, 'PCA.fit_transform', df_pca)
 
