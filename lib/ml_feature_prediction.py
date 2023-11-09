@@ -34,6 +34,7 @@ class dataObjAnalysis:
 		self.parameter_container['StandardScaler'] = {}
 		self.parameter_container['StandardScaler.fit_transform'] = {}
 		self.parameter_container['PCA'] = {}
+		self.parameter_container['PCA.fit_transform'] = {}
 
 	def updateParameterContainer(self, function_name, parameter_dict):
 		'''Update a set of parameter for a function with a new set'''
@@ -54,14 +55,20 @@ class dataObjAnalysis:
 	def computePCA(self, dataObj_name, **kwargs):
 		'''Standardize features and perform PCA'''
 		dataObj = self.dataManager.getDataObj(dataObj_name)
+
 		kwargs_ss = self.parameter_container['StandardScaler']
 		standard_scaler = StandardScaler(**kwargs_ss)
 		kwargs_ssf = self.parameter_container['StandardScaler.fit_transform']
 		df_scaled = pd.DataFrame(standard_scaler.fit_transform(dataObj.data, **kwargs_ssf), columns=dataObj.data.columns, index=dataObj.data.index,)
+		self.updateDataObjectAnalysis(dataObj, 'StandardScaler', standard_scaler)
 		self.updateDataObjectAnalysis(dataObj, 'StandardScaler.fit_transform', df_scaled)
+
 		kwargs_pca = self.parameter_container['PCA']
 		pca = PCA(**kwargs_pca)
-
+		kwargs_ssf = self.parameter_container['PCA.fit_transform']
+		df_pca = pd.DataFrame(pca.fit_transform(df_scaled), columns=df_scaled.columns, index=df_scaled.index)
+		self.updateDataObjectAnalysis(dataObj, 'PCA', pca)
+		self.updateDataObjectAnalysis(dataObj, 'PCA.fit_transform', df_pca)
 
 
 class dataManager:
