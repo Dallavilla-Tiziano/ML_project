@@ -26,13 +26,29 @@ class dataObj:
 class dataObjAnalysis:
 	def __init__(self, dataManagerObj, name='DataObjAnalysis'):
 		self.dataObjAnalysis_name = name
+		self.parameter_container = {}
+		self.setDataManagerObj(dataManagerObj)
+		self.initializeParameterContainer()
+
+	def initializeParameterContainer(self):
+		self.parameter_container['StandardScaler'] = {}
+
+	def updateParameterContainer(self, function_name, parameter_dict):
+		self.parameter_container[function_name] = parameter_dict
+
+	def setDataManagerObj(self, dataManagerObj):
+		'''Assign a dataManager object to the class for further analysis'''
 		if isinstance(dataManagerObj, dataManager):
 			self.dataManager = dataManagerObj
 		else:
 			raise ValueError(f''''{name}' is not a valid dataManager object!''')
 
-	def PCA(self, dataObj_name):
-		print(self.dataManager.dataManager_name)
+	def computePCA(self, dataObj_name, **kwargs):
+		'''Standardize features and perform PCA'''
+		dataObj = self.dataManager.getDataObj(dataObj_name)
+		kwargs_ss = self.parameter_container['StandardScaler']
+		standard_scaler = StandardScaler(**kwargs_ss)
+
 
 
 
