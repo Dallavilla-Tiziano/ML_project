@@ -206,8 +206,8 @@ class dataManager:
 			newdataObj1_type_of_data = dataObj1.type_of_data
 			newdataObj2_type_of_data = dataObj2.type_of_data
 			newdataObj_description = f'''result of joinIndexes between {dataObj1.name} and {dataObj2.name}'''
-			self.createDataObject('', newdataObj1_name, newdataObj1_type_of_data, newdataObj_description, data=dataObj1.data)
-			self.createDataObject('', newdataObj2_name, newdataObj2_type_of_data, newdataObj_description, data=dataObj2.data)
+			self.createDataObject('', newdataObj1_name, newdataObj1_type_of_data, description=newdataObj_description, data=dataObj1.data)
+			self.createDataObject('', newdataObj2_name, newdataObj2_type_of_data, description=newdataObj_description, data=dataObj2.data)
 			if del_parents:
 				self.deleteDataObject(dataObj1.name, dataObj2.name)
 		else:
