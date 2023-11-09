@@ -3,6 +3,8 @@ import pandas as pd
 import pickle
 import os
 import copy
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
 
 
 # Class that contains data
@@ -13,11 +15,25 @@ class dataObj:
 	name: str
 	data: pd.DataFrame()
 	type_of_data: str
+	analysis: dict = {}
 	description: str = ''
 	is_data_index_set: bool = False
 
 	def size(self):
 		return [len(self.data.index), len(self.data.columns)]
+
+
+class dataObjAnalysis:
+	def __init__(self, dataManager, name='DataObjAnalysis'):
+		self.dataObjAnalysis_name = name
+		if isinstance(dataManager, dataManager):
+			self.dataManager = dataManager
+		else:
+			raise ValueError(f''''{name}' is not a valid dataManager object!''')
+
+	def PCA(self, dataObj_name):
+		print(self.dataManager.dataManager_name)
+
 
 
 class dataManager:
@@ -158,6 +174,3 @@ class dataManager:
 					pd.RangeIndex. Please note that this type of index is not supported /
 					during operation such as join. Please set a different type of index /
 					with \'setDataObjIndex\'''')
-# @dataclass
-# class dataObjAnalysis:
-# 	data_manager: dataManager
