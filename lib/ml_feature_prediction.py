@@ -32,8 +32,11 @@ class dataObjAnalysis:
 
 	def initializeParameterContainer(self):
 		self.parameter_container['StandardScaler'] = {}
+		self.parameter_container['StandardScaler.fit_transform'] = {}
+		self.parameter_container['PCA'] = {}
 
 	def updateParameterContainer(self, function_name, parameter_dict):
+		'''Update a set of parameter for a function with a new set'''
 		self.parameter_container[function_name] = parameter_dict
 
 	def setDataManagerObj(self, dataManagerObj):
@@ -41,14 +44,23 @@ class dataObjAnalysis:
 		if isinstance(dataManagerObj, dataManager):
 			self.dataManager = dataManagerObj
 		else:
-			raise ValueError(f''''{name}' is not a valid dataManager object!''')
+			raise ValueError('The variable specified is not a valid dataManager object')
+
+	def updateDataObjectAnalysis(self, a_dataObj, analysis_name, result):
+		'''Add a result to a dataObj analysis dict'''
+		a_dataObj.analysis[analysis_name] = result
+		self.dataManager.updateDataObject(a_dataObj)
 
 	def computePCA(self, dataObj_name, **kwargs):
 		'''Standardize features and perform PCA'''
 		dataObj = self.dataManager.getDataObj(dataObj_name)
 		kwargs_ss = self.parameter_container['StandardScaler']
 		standard_scaler = StandardScaler(**kwargs_ss)
-
+		kwargs_ssf = self.parameter_container['StandardScaler.fit_transform']
+		df_scaled = pd.DataFrame(standard_scaler.fit_transform(dataObj.data, **kwargs_ssf), columns=dataObj.data.columns, index=dataObj.data.index,)
+		self.updateDataObjectAnalysis(dataObj, 'StandardScaler.fit_transform', df_scaled)
+		kwargs_pca = self.parameter_container['PCA']
+		pca = PCA(**kwargs_pca)
 
 
 
@@ -86,6 +98,12 @@ class dataManager:
 			return copy.deepcopy(self.data_container[name])
 		else:
 			raise KeyError(f'No data object named {name} is present in the data container!')
+
+	def updateDataObject(self, new_dataObj):
+		if new_dataObj.name in self.data_container:
+			self.data_container[new_dataObj.name] = new_dataObj
+		else:
+			raise KeyError(f'No data object named {new_dataObj.name} is present in the data container!')
 
 	def setDataObjIndex(self, name, index_col):
 		dataObj = self.getDataObj(name)
