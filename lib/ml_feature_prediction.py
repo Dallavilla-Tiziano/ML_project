@@ -24,10 +24,10 @@ class dataObj:
 
 
 class dataObjAnalysis:
-	def __init__(self, dataManager, name='DataObjAnalysis'):
+	def __init__(self, dataManagerObj, name='DataObjAnalysis'):
 		self.dataObjAnalysis_name = name
-		if isinstance(dataManager, dataManager):
-			self.dataManager = dataManager
+		if isinstance(dataManagerObj, dataManager):
+			self.dataManager = dataManagerObj
 		else:
 			raise ValueError(f''''{name}' is not a valid dataManager object!''')
 
