@@ -86,10 +86,10 @@ class dataManager:
 		elif (path) and (data is None):
 			data = pd.read_csv(path, sep=sep, index_col=index_col)
 			indexed = not isinstance(data.index, pd.RangeIndex)
-			self.data_container[name] = dataObj(path, name, data, type_of_data, description, is_data_index_set=indexed)
+			self.data_container[name] = dataObj(path, name, data, type_of_data, description=description, is_data_index_set=indexed)
 		elif not (path) and (data is not None):
 			indexed = not isinstance(data.index, pd.RangeIndex)
-			self.data_container[name] = dataObj(path, name, data, type_of_data, description, is_data_index_set=indexed)
+			self.data_container[name] = dataObj(path, name, data, type_of_data, description=description, is_data_index_set=indexed)
 		else:
 			print('''something went wrong while creating a data object, \
 					it is not possible to continue. Please check you parameters \
