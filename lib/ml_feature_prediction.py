@@ -15,7 +15,7 @@ class dataObj:
 	name: str
 	data: pd.DataFrame()
 	type_of_data: str
-	analysis: dict = {}
+	analysis: dict = field(default_factory=dict)
 	description: str = ''
 	is_data_index_set: bool = False
 
