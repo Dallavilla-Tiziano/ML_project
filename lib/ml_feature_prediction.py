@@ -5,6 +5,7 @@ import os
 import copy
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
+import plotly.express as px
 
 
 # Class that contains data
@@ -70,6 +71,36 @@ class dataObjAnalysis:
 		df_pca.columns = ['PC' + str(i) for i in range(1, len(df_pca.columns) + 1)]
 		self.updateDataObjectAnalysis(dataObj, 'PCA', pca)
 		self.updateDataObjectAnalysis(dataObj, 'PCA.fit_transform', df_pca)
+
+	def plotPCA(self, m_dataOBj_name, c_dataObj_name='', target=''):
+		'''Plot PCA and optionally visualize groups based on target column of clinical_dataObj)'''
+		width = 1000
+		height = 1000
+
+		m_dataObj = self.dataManager.getDataObj(m_dataOBj_name)
+		pc_df = m_dataObj.analysis['PCA.fit_transform'].sort_index(inplace=True)
+		if c_dataObj_name and target:
+			c_dataObj = self.dataManager.getDataObj(c_dataObj_name)
+			target_df = c_dataObj.data[[target]].sort_index(inplace=True)
+			if pc_df.index.equals(target_df.index):
+				fig = px.scatter_3d(
+					pc_df,
+					x='PC1',
+					y='PC2',
+					z='PC3',
+					color=target_df,
+					width=width,
+					height=height)
+		else:
+			fig = px.scatter_3d(
+				pc_df,
+				x='PC1',
+				y='PC2',
+				z='PC3',
+				width=width,
+				height=height)
+		fig.update_traces(marker_size=3)
+		fig.show()
 
 
 class dataManager:
