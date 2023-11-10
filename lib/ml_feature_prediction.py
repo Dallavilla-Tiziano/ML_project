@@ -72,31 +72,33 @@ class dataObjAnalysis:
 		self.updateDataObjectAnalysis(dataObj, 'PCA', pca)
 		self.updateDataObjectAnalysis(dataObj, 'PCA.fit_transform', df_pca)
 
-	def plotPCA(self, m_dataOBj_name, c_dataObj_name='', target=''):
+	def plotPCA(self, m_dataOBj_name, c_dataObj_name='', target='', pcs=['PC1', 'PC2', 'PC3']):
 		'''Plot PCA and optionally visualize groups based on target column of clinical_dataObj)'''
 		width = 1000
 		height = 1000
 
 		m_dataObj = self.dataManager.getDataObj(m_dataOBj_name)
-		pc_df = m_dataObj.analysis['PCA.fit_transform'].sort_index(inplace=True)
+		pc_df = m_dataObj.analysis['PCA.fit_transform']
+		pc_df.sort_index(inplace=True)
 		if c_dataObj_name and target:
 			c_dataObj = self.dataManager.getDataObj(c_dataObj_name)
-			target_df = c_dataObj.data[[target]].sort_index(inplace=True)
+			target_df = c_dataObj.data[[target]]
+			target_df.sort_index(inplace=True)
 			if pc_df.index.equals(target_df.index):
 				fig = px.scatter_3d(
 					pc_df,
-					x='PC1',
-					y='PC2',
-					z='PC3',
-					color=target_df,
+					x=pcs[0],
+					y=pcs[1],
+					z=pcs[2],
+					color=target_df[target],
 					width=width,
 					height=height)
 		else:
 			fig = px.scatter_3d(
 				pc_df,
-				x='PC1',
-				y='PC2',
-				z='PC3',
+				x=pcs[0],
+				y=pcs[1],
+				z=pcs[2],
 				width=width,
 				height=height)
 		fig.update_traces(marker_size=3)
