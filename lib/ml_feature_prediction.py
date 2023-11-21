@@ -106,7 +106,7 @@ class dataObjAnalysis:
 		fig.update_traces(marker_size=3)
 		fig.show()
 
-	def plotComponentsMatrix(self, m_dataOBj_name, c_dataObj_name='', target='', components):
+	def plotComponentsMatrix(self, m_dataOBj_name, c_dataObj_name='', target='', components=[]):
 		m_dataObj = self.dataManager.getDataObj(m_dataOBj_name)
 		if c_dataObj_name and target:
 			c_dataObj = self.dataManager.getDataObj(c_dataObj_name)
