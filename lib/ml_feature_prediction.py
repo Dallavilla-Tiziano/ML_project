@@ -120,7 +120,7 @@ class dataObjAnalysis:
 		elif bool(lst) and not isinstance(lst, basestring) and all(isinstance(elem, int) for elem in lst):
 			features = m_dataObj.analysis['PCA.fit_transform'].columns[components]
 		else:
-			features = m_dataObj.analysis['PCA.fit_transform'].columns[list(range(0:6))]
+			features = m_dataObj.analysis['PCA.fit_transform'].columns[list(range(0, 6))]
 
 		fig = px.scatter_matrix(
 			m_dataObj.analysis['PCA.fit_transform'],
