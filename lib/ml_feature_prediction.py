@@ -114,10 +114,10 @@ class dataObjAnalysis:
 		else:
 			col = 'k'
 		# check if components is a list of strings
-		if bool(lst) and not isinstance(lst, basestring) and all(isinstance(elem, basestring) for elem in lst):
+		if bool(components) and not isinstance(components, basestring) and all(isinstance(elem, basestring) for elem in components):
 			features = components
 		# check if components is a list of int
-		elif bool(lst) and not isinstance(lst, basestring) and all(isinstance(elem, int) for elem in lst):
+		elif bool(components) and not isinstance(components, basestring) and all(isinstance(elem, int) for elem in components):
 			features = m_dataObj.analysis['PCA.fit_transform'].columns[components]
 		else:
 			features = m_dataObj.analysis['PCA.fit_transform'].columns[list(range(0, 6))]
