@@ -6,6 +6,7 @@ import copy
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 import plotly.express as px
+import numpy as np
 
 
 # Class that contains data
@@ -72,6 +73,7 @@ class dataObjAnalysis:
 		self.updateDataObjectAnalysis(dataObj, 'PCA', pca)
 		self.updateDataObjectAnalysis(dataObj, 'PCA.fit_transform', df_pca)
 
+### IS THE FOLLOWING FUNCTION USEFUL?
 	def plotPCA(self, m_dataOBj_name, c_dataObj_name='', target='', pcs=['PC1', 'PC2', 'PC3']):
 		'''Plot PCA and optionally visualize groups based on target column of clinical_dataObj)'''
 		width = 1000
@@ -103,6 +105,47 @@ class dataObjAnalysis:
 				height=height)
 		fig.update_traces(marker_size=3)
 		fig.show()
+
+	def plotComponentsMatrix(self, m_dataOBj_name, c_dataObj_name='', target='', components):
+		m_dataObj = self.dataManager.getDataObj(m_dataOBj_name)
+		if c_dataObj_name and target:
+			c_dataObj = self.dataManager.getDataObj(c_dataObj_name)
+			col = c_dataObj.data[target]
+		else:
+			col = 'k'
+		# check if components is a list of strings
+		if bool(lst) and not isinstance(lst, basestring) and all(isinstance(elem, basestring) for elem in lst):
+			features = components
+		# check if components is a list of int
+		elif bool(lst) and not isinstance(lst, basestring) and all(isinstance(elem, int) for elem in lst):
+			features = m_dataObj.analysis['PCA.fit_transform'].columns[components]
+		else:
+			features = m_dataObj.analysis['PCA.fit_transform'].columns[list(range(0:6))]
+
+		fig = px.scatter_matrix(
+			m_dataObj.analysis['PCA.fit_transform'],
+			dimensions=features,
+			color=col,
+			height=1000,
+			opacity=0.5
+		)
+		fig.update_traces(diagonal_visible=False)
+		fig.show()
+
+	def getCentroidCoordinates(self, m_dataOBj_name, c_dataObj_name, target):
+		m_dataObj = self.dataManager.getDataObj(m_dataOBj_name)
+		c_dataObj = self.dataManager.getDataObj(c_dataObj_name)
+		m_dataObj.analysis['PCA.fit_transform']['grouping'] = list(c_dataObj.data[target])
+		pca_groups = m_dataObj.analysis['PCA.fit_transform'].groupby('grouping')
+		centroids_coordinates = {}
+		for index, group in pca_groups:
+			centroid = np.array(group.iloc[:, 0:-1].mean())
+			centroids_coordinates[index] = centroid
+		centroids_coordinates_df = pd.DataFrame(centroids_coordinates).T
+		centroids_coordinates_df.columns = ['PC' + str(i) for i in range(1, len(centroids_coordinates_df.columns) + 1)]
+		self.updateDataObjectAnalysis(m_dataObj, 'getCentroidCoordinates', centroids_coordinates_df)
+
+
 
 
 class dataManager:
@@ -205,7 +248,6 @@ class dataManager:
 		else:
 			print('Can\'t import the data manager object, file does not exist.')
 
-# IS THE FOLLOWING FUNCTION USEFUL????
 	def dataObjectJoin(self, dataObj1_name, dataObj2_name, name='', del_parents=False, **kwargs):
 		'''Perform a join operation on 2 dataObj'''
 		dataObj1 = self.getDataObj(dataObj1_name)
